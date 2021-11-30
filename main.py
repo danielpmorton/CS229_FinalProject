@@ -14,6 +14,7 @@ from keras.layers import LSTM
 import preprocessing
 import lstm
 import postprocessing 
+import RF
 
 # Fetch data 
 
@@ -33,6 +34,12 @@ train_percentage = 0.6666
 # Run linear regression model
 
 # Run RF model
+# Some notes:
+# This script includes a test/train split function. ** Should I remove this so we keep things consistent?
+# features will be the query information (X) and labels will be the covid case data (Y)
+# See the RF script for more info on parameters you can adjust
+# This script also includes some postprocessing stuff, which could maybe be moved to your other file?
+RF_predict = RF.randomForest(features, labels)
 
 # Run LSTM model 
 lstm_predict = lstm.lstm(train_X, train_Y, train_percentage)
