@@ -80,6 +80,9 @@ def getData(startDateX, endDateX, startDateY, endDateY, geo, state):
     geo: location parameter for Google trends API in the format: 'US-CA'
     state: state location for covid case data in the format: 'California'
 
+    returns:
+    trends_X_df: google trends frequency data as pandas table 
+    cases_Y: case data as pandas table
     """
 
     # Reformat date into correct format for JHU covid case data API
