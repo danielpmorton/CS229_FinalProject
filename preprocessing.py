@@ -9,7 +9,7 @@ import google_trends_daily.gtrend as gtrend
 
 # Define search queries of interest 
 queries = ['covid', 'coronavirus', 'covid-19', 'covid cases', 'coronavirus cases', 'covid symptoms', 
-'coronavirus symptoms', 'covid symptoms', 'cough', 'virus', 'vaccine', 'covid vaccine']
+'coronavirus symptoms', 'cough', 'virus', 'vaccine', 'covid vaccine']
 num_queries = len(queries)
 
 
