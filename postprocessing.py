@@ -73,6 +73,9 @@ def plotRFTrees(rf, feature_list, train_features, train_labels):
     from sklearn.ensemble import RandomForestRegressor
     from sklearn.tree import export_graphviz
     import pydot
+    import graphviz
+    import os
+    os.environ["PATH"] += os.pathsep + 'C:\Program Files\Graphviz\bin'
 
     # Visualization of decision tree
     # Pull out one tree from the forest

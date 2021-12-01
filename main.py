@@ -36,11 +36,11 @@ train_percentage = 0.6666
 
 # Run LSTM model 
 lstm_predict = lstm.lstm(X, Y, train_percentage)
-
 split_idx = round(len(Y)*train_percentage)
 lstm_rms = postprocessing.RMSE(Y[split_idx:], lstm_predict)
 print(lstm_rms)
 
+# Random Forest
 # Train-Test Split for RF
 TTS_kwargs = { 'test_size': 1-train_percentage,
                'random_state': 0 } # Seed for random number generator
