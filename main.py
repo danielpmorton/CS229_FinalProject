@@ -1,5 +1,4 @@
 from math import sqrt
-from numpy import concatenate
 from matplotlib import pyplot
 from pandas import read_csv
 from pandas import DataFrame
@@ -9,7 +8,7 @@ from sklearn.metrics import mean_squared_error
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
-
+import numpy as np
 
 import preprocessing
 import lstm
@@ -26,28 +25,44 @@ endDateY = '2021-04-16'
 geo = 'US-CA'
 state = 'California'
 
-train_X, train_Y = preprocessing.getData(startDateX, endDateX, startDateY, endDateY, geo, state)
+# X is the google trends data and Y is the covid case number labels
+X, Y = preprocessing.getData(startDateX, endDateX, startDateY, endDateY, geo, state)
 
 # define train/test split over timeframe
 train_percentage = 0.6666
 
 # Run linear regression model
-
-# Run RF model
-# Some notes:
-# This script includes a test/train split function. ** Should I remove this so we keep things consistent?
-# features will be the query information (X) and labels will be the covid case data (Y)
-# See the RF script for more info on parameters you can adjust
-# This script also includes some postprocessing stuff, which could maybe be moved to your other file?
-RF_predict = RF.randomForest(features, labels)
+# (Reminder: Insert here!)
 
 # Run LSTM model 
-lstm_predict = lstm.lstm(train_X, train_Y, train_percentage)
+lstm_predict = lstm.lstm(X, Y, train_percentage)
 
-split_idx = round(len(train_Y)*train_percentage)
-lstm_rms = postprocessing.RMSE(train_Y[split_idx:], lstm_predict)
+split_idx = round(len(Y)*train_percentage)
+lstm_rms = postprocessing.RMSE(Y[split_idx:], lstm_predict)
 print(lstm_rms)
 
-postprocessing.plotTrainTest(train_Y, lstm_predict, train_percentage, 'LSTM')
+# Train-Test Split for RF
+TTS_kwargs = { 'test_size': 1-train_percentage,
+               'random_state': 0 } # Seed for random number generator
+train_features, test_features, train_labels, test_labels = preprocessing.RF_TTS(X, Y, TTS_kwargs)
+# Run RF model
+RF_kwargs = {   'bootstrap': True,
+                'criterion': 'squared_error',
+                'max_depth': None, 
+                'min_samples_leaf': 1,
+                'n_estimators': 1000,
+                'min_samples_split': 2, 
+                'random_state': 0 } # Seed for random number generator
+RFmodel, RF_predict = RF.randomForest(train_features, test_features, train_labels, RF_kwargs)
 
+# Postprocessing for LSTM
+postprocessing.plotTrainTest(Y, lstm_predict, train_percentage, 'LSTM')
 
+# Postprocessing for RF
+# Note: can probably use the same postprocessing function as with LSTM for this
+feature_list = list(X.columns)
+features = np.array(X)
+postprocessing.plotRF(features, feature_list, Y, RF_predict)
+postprocessing.getRFImportances(RFmodel, feature_list)
+postprocessing.showAccuracyInfo(RF_predict, test_labels)
+postprocessing.plotRFTrees(RFmodel, feature_list, train_features, train_labels) # not working!!

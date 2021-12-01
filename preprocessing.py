@@ -7,6 +7,9 @@ import pandas as pd
 import matplotlib
 import google_trends_daily.gtrend as gtrend
 
+from sklearn.model_selection import train_test_split
+
+
 # Define search queries of interest 
 queries = ['covid', 'coronavirus', 'covid-19', 'covid cases', 'coronavirus cases', 'covid symptoms', 
 'coronavirus symptoms', 'cough', 'virus', 'vaccine', 'covid vaccine']
@@ -112,3 +115,8 @@ def getData(startDateX, endDateX, startDateY, endDateY, geo, state):
     cases_Y = dailyCases[startDate_JHU_format:endDate_JHU_format]
     
     return trends_X_df, cases_Y
+
+def RF_TTS(features, labels, TTS_kwargs):
+    # Train-Test-Split for Random Forest
+    train_features, test_features, train_labels, test_labels = train_test_split(features, labels, **TTS_kwargs)
+    return train_features, test_features, train_labels, test_labels
