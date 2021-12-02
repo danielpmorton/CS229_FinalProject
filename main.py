@@ -14,6 +14,7 @@ import preprocessing
 import lstm
 import postprocessing 
 import RF
+import linear
 
 # Fetch data 
 
@@ -30,13 +31,14 @@ X, Y = preprocessing.getData(startDateX, endDateX, startDateY, endDateY, geo, st
 
 # define train/test split over timeframe
 train_percentage = 0.6666
+split_idx = round(len(Y)*train_percentage)
 
 # Run linear regression model
-# (Reminder: Insert here!)
+linear_predict = linear.linear(X, Y, train_percentage)
+linear_rms = postprocessing.RMSE(Y[split_idx:], linear_predict)
 
 # Run LSTM model 
 lstm_predict = lstm.lstm(X, Y, train_percentage)
-split_idx = round(len(Y)*train_percentage)
 lstm_rms = postprocessing.RMSE(Y[split_idx:], lstm_predict)
 print(lstm_rms)
 
@@ -55,6 +57,7 @@ RF_kwargs = {   'bootstrap': True,
                 'random_state': 0 } # Seed for random number generator
 RFmodel, RF_predict = RF.randomForest(train_features, test_features, train_labels, RF_kwargs)
 
+postprocessing.plotTrainTest(Y, linear_predict, train_percentage, 'Linear Regression')
 
 # Postprocessing for LSTM
 postprocessing.plotTrainTest(Y, lstm_predict, train_percentage, 'LSTM')
