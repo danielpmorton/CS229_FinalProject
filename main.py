@@ -73,9 +73,12 @@ postprocessing.plotTrainTest(Y, lstm_predict, train_percentage, 'LSTM')
 
 # Postprocessing for RF
 # Note: can probably use the same postprocessing function as with LSTM for this
-feature_list = list(X.columns)
-features = np.array(X)
-postprocessing.plotRF(features, feature_list, Y, RF_predict)
-postprocessing.getRFImportances(RFmodel, feature_list)
-postprocessing.showAccuracyInfo(RF_predict, test_labels)
-postprocessing.plotRFTrees(RFmodel, feature_list, train_features, train_labels) # not working!!
+
+postprocessing.plotTrainTest(Y, RF_predict, train_percentage, "Random Forest")
+
+# feature_list = list(X.columns)
+# features = np.array(X)
+# postprocessing.plotRF(features, feature_list, Y, RF_predict)
+# postprocessing.getRFImportances(RFmodel, feature_list)
+# postprocessing.showAccuracyInfo(RF_predict, test_labels)
+# postprocessing.plotRFTrees(RFmodel, feature_list, train_features, train_labels) # not working!!
