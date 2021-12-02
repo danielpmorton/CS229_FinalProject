@@ -20,9 +20,9 @@ import linear
 
 # input parameters for getData
 startDateX = '2021-01-01'
-endDateX = '2021-03-31'
+endDateX = '2021-04-30'
 startDateY = '2021-01-17'
-endDateY = '2021-04-16'
+endDateY = '2021-05-16'
 geo = 'US-CA'
 state = 'California'
 
