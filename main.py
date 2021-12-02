@@ -22,8 +22,8 @@ startDateX = '2021-01-01'
 endDateX = '2021-03-31'
 startDateY = '2021-01-17'
 endDateY = '2021-04-16'
-geo = 'US-CA'
-state = 'California'
+geo = 'US-TX'
+state = 'Texas'
 
 train_X, train_Y = preprocessing.getData(startDateX, endDateX, startDateY, endDateY, geo, state)
 
