@@ -42,9 +42,18 @@ print(lstm_rms)
 
 # Random Forest
 # Train-Test Split for RF
-TTS_kwargs = { 'test_size': 1-train_percentage,
-               'random_state': 0 } # Seed for random number generator
-train_features, test_features, train_labels, test_labels = preprocessing.RF_TTS(X, Y, TTS_kwargs)
+RF_TTS_method = 1
+if RF_TTS_method == 0:
+    # Use the scikit learn train test split (random sampling)
+    TTS_kwargs = { 'test_size': 1-train_percentage,
+                'random_state': 0 } # Seed for random number generator
+    train_features, test_features, train_labels, test_labels = preprocessing.RF_TTS(X, Y, TTS_kwargs)
+else:
+    # Use our manual method of TTS at split_idx
+    train_features = X[:split_idx]
+    test_features = X[split_idx:]
+    train_labels = Y[:split_idx]
+    test_labels = Y[split_idx:]
 # Run RF model
 RF_kwargs = {   'bootstrap': True,
                 'criterion': 'squared_error',

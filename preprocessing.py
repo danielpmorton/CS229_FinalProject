@@ -8,7 +8,7 @@ import matplotlib
 import google_trends_daily.gtrend as gtrend
 
 from sklearn.model_selection import train_test_split
-
+import platform
 
 # Define search queries of interest 
 queries = ['covid', 'coronavirus', 'covid-19', 'covid cases', 'coronavirus cases', 'covid symptoms', 
@@ -94,8 +94,17 @@ def getData(startDateX, endDateX, startDateY, endDateY, geo, state):
     num_days = (d2-d1).days +1 # Adding 1 to match Megan's values (inclusivity of the end date?)
     dayIDs = np.arange(num_days).reshape(-1,1)
 
-    startDate_JHU_format = d1.strftime('%-m/%-d/%y') # Converting from date format for trends to JHU df labels
-    endDate_JHU_format = d2.strftime('%-m/%-d/%y') # Converting from date format for trends to JHU df labels
+    # MAC BELOW
+
+    # startDate_JHU_format = d1.strftime('%-m/%-d/%y') # Converting from date format for trends to JHU df labels
+    # endDate_JHU_format = d2.strftime('%-m/%-d/%y') # Converting from date format for trends to JHU df labels
+    # WINDOWS BELOW
+    if platform.system() == 'Windows':
+        startDate_JHU_format = d1.strftime('%#m/%#d/%y') # Converting from date format for trends to JHU df labels
+        endDate_JHU_format = d2.strftime('%#m/%#d/%y')
+    else:
+        startDate_JHU_format = d1.strftime('%-m/%-d/%y') # Converting from date format for trends to JHU df labels
+        endDate_JHU_format = d2.strftime('%-m/%-d/%y') # Converting from date format for trends to JHU df labels
     # NOTE: if the above gives an error, the formatting for the strftime with no zero padding is different depending on windows vs linux
     # The # symbol in the month and say fields removes the zero padding on windows
 
