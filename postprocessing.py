@@ -1,4 +1,4 @@
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
@@ -6,6 +6,10 @@ import pandas as pd
 def RMSE(actual_y, predict_y):
     rms = mean_squared_error(actual_y, predict_y, squared=False)
     return rms
+
+def MAPE(actual_y, predict_y):
+    error = mean_absolute_percentage_error(actual_y, predict_y)
+    return error
 
 def plotTrainTest(actual_y, predict_y, train_percentage, model_name):
     """

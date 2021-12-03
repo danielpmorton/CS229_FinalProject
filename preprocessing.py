@@ -94,10 +94,6 @@ def getData(startDateX, endDateX, startDateY, endDateY, geo, state):
     num_days = (d2-d1).days +1 # Adding 1 to match Megan's values (inclusivity of the end date?)
     dayIDs = np.arange(num_days).reshape(-1,1)
 
-    # MAC BELOW
-
-    # startDate_JHU_format = d1.strftime('%-m/%-d/%y') # Converting from date format for trends to JHU df labels
-    # endDate_JHU_format = d2.strftime('%-m/%-d/%y') # Converting from date format for trends to JHU df labels
     # WINDOWS BELOW
     if platform.system() == 'Windows':
         startDate_JHU_format = d1.strftime('%#m/%#d/%y') # Converting from date format for trends to JHU df labels
