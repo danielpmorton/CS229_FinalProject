@@ -239,3 +239,89 @@ def getDataNew(startDateX, endDateX, startDateY, endDateY, geo, state):
     cases_Y = dailyCases[startDate_JHU_format:endDate_JHU_format]
     
     return trends_X_df, cases_Y, dailyCases # NEW: including dailyCases in the output to include all of the case data
+
+
+
+    ###########################################################
+
+def getTrendsDataAblation(startDate, endDate, geo, myqueries):
+    # INPUTS ------------------------
+    # startDate  | example: '2020-01-22' -- of form YEAR-MO-DY
+    # endDate    | example: '2020-04-22'
+    # geo        | example: 'US-CA'
+    # -------------------------------
+
+    # Parameters for the gtrend function
+    pytrend = TrendReq(hl='en-US')
+    cat=0
+    gprop=''
+
+    # Getting size
+    num_queries = len(myqueries)
+
+    # Parsing the dates as an input to the function
+    # Also, using these dates to parse the difference in days and initialize arrays automatically
+    d1 = datetime.strptime(startDate, '%Y-%m-%d')
+    d2 = datetime.strptime(endDate, '%Y-%m-%d')
+    num_days = (d2-d1).days +1 # Adding 1 to match Megan's values (inclusivity of the end date?)
+
+    # Initializing a matrix to store the training data
+    trendsData = np.zeros((num_days, num_queries))
+    
+    i = 0
+    for keyword in myqueries: 
+        df = gtrend.get_daily_trend(pytrend, keyword, startDate, endDate, geo=geo, cat=cat, gprop=gprop, verbose=True, tz=0)
+        trendsData[:,i] = np.array(df[keyword])
+        i += 1
+
+    return trendsData
+
+def getDataAblation(startDateX, endDateX, startDateY, endDateY, geo, state, myqueries):
+
+    """
+    Retrieves JHU covid case data and search query results from Google trends API
+
+    startDateX: start date for Google trends query data in the format: '2021-01-01'
+    endDateX: end date for Google trends query data in the format: '2021-03-31'
+    startDateY: start date for covid case data in the format: '2021-01-01'
+    endDateY: end date for coivd case data in the format: '2021-03-31'
+    geo: location parameter for Google trends API in the format: 'US-CA'
+    state: state location for covid case data in the format: 'California'
+
+    returns:
+    trends_X_df: google trends frequency data as pandas table 
+    cases_Y: case data as pandas table
+    """
+
+    # Reformat date into correct format for JHU covid case data API
+    d1 = datetime.strptime(startDateY, '%Y-%m-%d')
+    d2 = datetime.strptime(endDateY, '%Y-%m-%d')
+    num_days = (d2-d1).days +1 # Adding 1 to match Megan's values (inclusivity of the end date?)
+    dayIDs = np.arange(num_days).reshape(-1,1)
+
+    # WINDOWS BELOW
+    if platform.system() == 'Windows':
+        startDate_JHU_format = d1.strftime('%#m/%#d/%y') # Converting from date format for trends to JHU df labels
+        endDate_JHU_format = d2.strftime('%#m/%#d/%y')
+    else:
+        startDate_JHU_format = d1.strftime('%-m/%-d/%y') # Converting from date format for trends to JHU df labels
+        endDate_JHU_format = d2.strftime('%-m/%-d/%y') # Converting from date format for trends to JHU df labels
+    # NOTE: if the above gives an error, the formatting for the strftime with no zero padding is different depending on windows vs linux
+    # The # symbol in the month and say fields removes the zero padding on windows
+
+
+    # Querying Google trends API
+    trends_X = getTrendsDataNew(startDateX, endDateX, geo, myqueries)
+    # Put into a dataframe with labeled columns with the search queries
+    trends_X_df = pd.DataFrame(trends_X, columns=myqueries)
+
+    # Querying JHU API
+    startOfCovid = '1/22/20' # The first day where data has been recorded
+    endOfCovid = '10/30/21' # The last day of relevance to this project
+    dailyCases = getAllJHUdataNew(state, startOfCovid, endOfCovid) # THIS IS A PANDAS SERIES NOT DF
+
+    # Get just the case numbers corresponding to the range of days we're observing
+    # These are the Y values for the model
+    cases_Y = dailyCases[startDate_JHU_format:endDate_JHU_format]
+    
+    return trends_X_df, cases_Y, dailyCases # NEW: including dailyCases in the output to include all of the case data
