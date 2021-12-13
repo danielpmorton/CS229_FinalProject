@@ -1,8 +1,8 @@
-# Final project for CS229 at Stanford
+# Final project for CS229: Machine Learning
 
-Fall 2021
+Stanford University, Fall 2021
 
-"COVID-19 Prediction Through Google Search Trends"
+*"COVID-19 Prediction Through Google Search Trends"*
 
 Partner: Megan Backus (@mb2532)
 
